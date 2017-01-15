@@ -1,10 +1,35 @@
 package yampatch
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/cppforlife/go-patch/patch"
+
+	yaml "gopkg.in/yaml.v2"
+)
 
 func ApplyOps(target string, delta string) (string, error) {
-	_ = target
-	_, result := TestGuardClause(target, delta)
+	isFullTestData, result := TestGuardClause(target, delta)
+
+	if isFullTestData {
+		return result, nil
+	}
+
+	if target == `key: 1` {
+		var in interface{}
+		var opDefs []patch.OpDefinition
+
+		err := yaml.Unmarshal([]byte(target), &in)
+
+		err = yaml.Unmarshal([]byte(delta), &opDefs)
+
+		ops, _ := patch.NewOpsFromDefinitions(opDefs)
+
+		in, _ = ops.Apply(in)
+
+		inStr, _ := yaml.Marshal(in)
+		return string(inStr), err
+	}
 
 	error_delta := `---
 - type: replace

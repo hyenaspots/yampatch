@@ -119,17 +119,20 @@ value: 10`
 		BeforeEach(func() {
 			target = `key: 1`
 
-			delta = `- type: replace
-			path: /key
-			value: 10`
+			delta = `
+- type: replace
+  path: /key
+  value: 10`
 		})
 
 		It("Returns the post-op string", func() {
-			desiredResult = `key: 10`
+			desiredResult = `key: 10
+`
 			actualResult, err := ApplyOps(target, delta)
 
-			Expect(actualResult).To(Equal(desiredResult))
 			Expect(err).To(BeNil())
+			Expect(actualResult).To(Equal(desiredResult))
+
 		})
 	})
 })
