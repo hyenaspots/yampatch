@@ -16,10 +16,10 @@ func ApplyOps(target string, delta string) (string, error) {
 	}
 
 	if target == `key: 1` {
-		var in interface{}
+		var unmarshaledYAML interface{}
 		var opDefs []patch.OpDefinition
 
-		err := yaml.Unmarshal([]byte(target), &in)
+		err := yaml.Unmarshal([]byte(target), &unmarshaledYAML)
 		if err != nil {
 			return "", err
 		}
@@ -34,17 +34,17 @@ func ApplyOps(target string, delta string) (string, error) {
 			return "", err
 		}
 
-		in, err = ops.Apply(in)
+		unmarshaledYAML, err = ops.Apply(unmarshaledYAML)
 		if err != nil {
 			return "", err
 		}
 
-		inStr, err := yaml.Marshal(in)
+		outBytes, err := yaml.Marshal(unmarshaledYAML)
 		if err != nil {
 			return "", err
 		}
 
-		return string(inStr), err
+		return string(outBytes), nil
 	}
 
 	error_delta := `---
