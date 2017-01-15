@@ -110,8 +110,9 @@ value: 10`
 		It("Returns an error", func() {
 			result, err := ApplyOps(target, delta)
 
-			Expect(result).To(Equal(desiredResult))
 			Expect(err).To(HaveOccurred())
+			Expect(result).To(Equal(desiredResult))
+
 		})
 	})
 

@@ -20,14 +20,30 @@ func ApplyOps(target string, delta string) (string, error) {
 		var opDefs []patch.OpDefinition
 
 		err := yaml.Unmarshal([]byte(target), &in)
+		if err != nil {
+			return "", err
+		}
 
 		err = yaml.Unmarshal([]byte(delta), &opDefs)
+		if err != nil {
+			return "", err
+		}
 
-		ops, _ := patch.NewOpsFromDefinitions(opDefs)
+		ops, err := patch.NewOpsFromDefinitions(opDefs)
+		if err != nil {
+			return "", err
+		}
 
-		in, _ = ops.Apply(in)
+		in, err = ops.Apply(in)
+		if err != nil {
+			return "", err
+		}
 
-		inStr, _ := yaml.Marshal(in)
+		inStr, err := yaml.Marshal(in)
+		if err != nil {
+			return "", err
+		}
+
 		return string(inStr), err
 	}
 
