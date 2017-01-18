@@ -15,6 +15,7 @@ var _ = Describe("Yampatch", func() {
 			unpatchedYAML = `---
 key1: 1
 key2:`
+
 			operationsYAML = `---
 - type: remove
   path: /key2
